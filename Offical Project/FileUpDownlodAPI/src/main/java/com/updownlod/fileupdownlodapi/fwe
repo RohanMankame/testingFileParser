@@ -1,0 +1,47 @@
+            java.sql.Connection con = null;
+            String username = "root";
+            String password= "rohan";
+            String dataConn = "jdbc:mysql://localhost:3306/mysql?zeroDateTimeBehavior=CONVERT_TO_NULL";//"jdbc:mysql://localhost:3306/sunlabswipe";
+            Statement stmt = null;
+            ResultSet results =null;
+            int IDfound;
+
+
+        try {
+            //Class.forName("com.mysql.jdbc.Driver");
+            con = DriverManager.getConnection(dataConn,username,password);
+        } catch (SQLException ex) {
+            Logger.getLogger(IDStatusGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        int ID = Integer.valueOf(PSUIDinput.getText());
+        //String STATUS = "Active";
+        //String ROLE = roleActivatetext.getText();
+            System.out.print("sql connection works");
+            String sql = "SELECT * FROM sunlabswipe.userstatus WHERE ID = "+ ID;
+
+
+            PreparedStatement pst = con.prepareStatement(sql);
+            //pst.execute();
+            results = pst.executeQuery(sql);
+
+            boolean Records = results.next();
+            if(!Records){
+                System.out.println("No rows in table");
+                try {
+                    pst.close();
+                    //return fileCode;
+                } catch (SQLException ex) {
+                    Logger.getLogger(ScannerGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            //Display rows in console
+            try {
+                do{
+                    IDfound = results.getInt(0);
+                    System.out.println(IDfound);
+                }while(results.next());
+                pst.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+
+        }
